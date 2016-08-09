@@ -1,0 +1,30 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+
+    src.path:
+        label: 'Root Vue Folder'
+        comment: 'Root Vue Folder comment'
+        description: 'Root Vue Folder desc'
+        type: text
+        default: $/plugins/defr/vuemanager/
+
+    public.path:
+        label: 'Root Compiled Folder'
+        comment: 'Root Compiled Folder comment'
+        description: 'Root Compiled Folder desc'
+        type: text
+        default: $/themes/vue-web812/
+
+    # confirmation_text:
+    #   label: laminsanneh.flexicontact::lang.strings.confirmation_text
+    #   comment: laminsanneh.flexicontact::lang.strings.confirmation_text_comment
+    #   description: laminsanneh.flexicontact::lang.strings.confirmation_text_desc
+    #   type: textarea
+    # enable_captcha:
+    #   label: laminsanneh.flexicontact::lang.strings.enable_captcha
+    #   comment: laminsanneh.flexicontact::lang.strings.enable_captcha_comment
+    #   description: laminsanneh.flexicontact::lang.strings.enable_captcha_desc
+    #   type: switch

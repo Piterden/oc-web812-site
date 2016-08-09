@@ -1,0 +1,10 @@
+name: 'Vue Components'
+modelClass: DEfr\VueManager\Models\Component
+form: $/defr/vuemanager/models/component/fields.yaml
+defaultRedirect: defr/vuemanager/components
+create:
+    redirect: 'defr/vuemanager/components/update/:id'
+    redirectClose: defr/vuemanager/components
+update:
+    redirect: defr/vuemanager/components
+    redirectClose: defr/vuemanager/components

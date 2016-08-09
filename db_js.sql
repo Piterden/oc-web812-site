@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `defr_vuemanager_javascripts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `disk_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `file_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `file_size` int(11) NOT NULL,
+  `content_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `field` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `attachment_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `attachment_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `is_public` tinyint(1) NOT NULL DEFAULT '1',
+  `sort_order` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `system_files_field_index` (`field`),
+  KEY `system_files_attachment_id_index` (`attachment_id`),
+  KEY `system_files_attachment_type_index` (`attachment_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;

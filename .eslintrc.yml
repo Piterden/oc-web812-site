@@ -1,0 +1,20 @@
+parser: babel-eslint
+env:
+  browser: true
+  node: true
+extends: 'eslint:recommended'
+rules:
+  indent:
+    - 1
+    - 2
+  linebreak-style:
+    - 2
+    - unix
+  quotes:
+    - 2
+    - single
+  semi:
+    - 1
+    - never
+plugins:
+  - vue

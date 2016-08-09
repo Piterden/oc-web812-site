@@ -1,0 +1,11 @@
+title: 'Vue Pages'
+list: $/defr/vuemanager/models/page/columns.yaml
+modelClass: DEfr\VueManager\Models\Page
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'defr/vuemanager/pages/update/:id'

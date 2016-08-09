@@ -1,0 +1,10 @@
+name: 'Vue Pages'
+form: $/defr/vuemanager/models/page/fields.yaml
+modelClass: DEfr\VueManager\Models\Page
+defaultRedirect: defr/vuemanager/pages
+create:
+    redirect: 'defr/vuemanager/pages/update/:id'
+    redirectClose: defr/vuemanager/pages
+update:
+    redirect: defr/vuemanager/pages
+    redirectClose: defr/vuemanager/pages

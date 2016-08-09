@@ -1,0 +1,12 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+file:
+    label: File
+    view:
+        form: $/defr/vuemanager/models/file/fields.yaml
+        toolbarButtons: update|delete
+    manage:
+        form: $/defr/vuemanager/models/file/fields.yaml
+        list: $/defr/vuemanager/models/file/columns.yaml
+

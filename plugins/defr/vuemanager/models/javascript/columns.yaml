@@ -1,0 +1,12 @@
+columns:
+    title:
+        label: Name
+        type: text
+        searchable: true
+        sortable: true
+    file:
+        label: Filename
+        relation: file
+        select: file_name
+        searchable: true
+        sortable: true

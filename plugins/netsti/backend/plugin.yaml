@@ -1,0 +1,6 @@
+plugin:
+    name: 'netsti.backend::lang.plugin.name'
+    description: 'netsti.backend::lang.plugin.description'
+    author: NetSTI
+    icon: oc-icon-rocket
+    homepage: 'http://netsti.com/plugins'

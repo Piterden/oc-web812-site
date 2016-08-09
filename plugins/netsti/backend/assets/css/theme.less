@@ -1,0 +1,154 @@
+// BACKEND THEME
+@color   : #444444;
+@primary : #3498db;
+@success : #1abc9c;
+@warning : #f0ad4e;
+@info    : #59a9c2;
+@danger  : #D33257;
+@default : #34495e;
+
+
+body{
+	font-family:'Roboto',Arial,sans-serif;
+	color: @color;
+}
+nav{
+	&#layout-mainmenu{
+		&.navbar{
+			background-color: darken(@default, 20%);
+		}
+	}
+	&#layout-sidenav{
+		ul{
+			li{
+				a{
+					transition: 0.4s;
+				}
+			}
+		}
+	}
+	&#layout-mainmenu{
+		&.navbar{
+			ul{
+				li{
+					color: fade(#ffffff,30%);
+					&.active{
+						a{
+							i{
+								font-size: 28px;
+							}
+						}
+					}
+				}
+			}
+		}
+		ul{
+			li{
+				transition: 0.4s;
+				&.account{
+					img{
+						border-radius: 3px;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.layout-cell.width-120{
+		width: 60px !important;
+
+		nav li a{
+			font-size: 0 !important;
+
+			i{
+				font-size: 22px !important;
+			}
+		}
+	}
+}
+
+#layout-sidenav ul li span.counter{
+	background-color: #8BC34A;
+	border: 2px solid #34495e;
+	padding: 2px 4px;
+	color: #34495e;
+	font-weight: bolder;
+	top: 8px;
+	right: 35px;
+}
+
+.btn{
+	transition: 0.4s;
+
+	&.btn-primary{
+		background-color: @primary;
+		.disabled;
+		&:hover{
+			background-color: darken(@primary, 10%);
+		}
+	}
+
+	&.btn-success{
+		background-color: @success;
+		.disabled;
+		&:hover{
+			background-color: darken(@success, 10%);
+		}
+	}
+
+	&.btn-warning{
+		background-color: @warning;
+		.disabled;
+		&:hover{
+			background-color: darken(@warning, 10%);
+		}
+	}
+
+	&.btn-info{
+		background-color: @info;
+		.disabled;
+		&:hover{
+			background-color: darken(@info, 10%);
+		}
+	}
+
+	&.btn-danger{
+		background-color: @danger;
+		.disabled;
+		&:hover{
+			background-color: darken(@danger, 10%);
+		}
+	}
+
+	// &.btn-default{
+	// 	background-color: @default;
+	// 	color: #fff;
+	// 	.disabled;
+	// 	&:hover{
+	// 		background-color: lighten(@default,10%);
+	// 	}
+	// }
+}
+
+.disabled(){
+	&.disabled{
+		background-color: #e3e3e3;
+		color: #777;
+	}
+	&[disabled]{
+		background-color: #e3e3e3;
+		color: #777;
+	}
+	&.control-disabled{
+		background-color: #e3e3e3;
+		color: #777;
+	}
+}
+.owl-tagbox li[data-control="tag"]{
+	border: none !important;
+}
+.field-multilingual .btn:hover{background-color: transparent;}
+// .oc-logo-white{ background-image: url(../img/logo-main-white.svg) }
+// .oc-bg-logo{ background-image: url(../img/logo-main-fade.svg) !important }

@@ -1,0 +1,13 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    file_name:
+        label: Filename
+        description: Filename description
+
+    title:
+        label: Title
+        description: Title description
+        type: text

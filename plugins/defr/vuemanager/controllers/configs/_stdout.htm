@@ -1,0 +1,14 @@
+<?
+
+while (@ ob_end_flush()); // end all output buffers if any
+
+echo $str;
+
+$streamingResponce = new $str();
+
+// $streamingResponce->setCallback(cb($prefix), 200);
+
+echo $streamingResponce->getContent();
+
+
+die;

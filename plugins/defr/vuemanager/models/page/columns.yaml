@@ -1,0 +1,21 @@
+columns:
+    name:
+        label: Name
+        type: text
+        searchable: true
+        sortable: true
+    filename:
+        label: Filename
+        type: text
+        searchable: true
+        sortable: true
+    template_lang:
+        label: 'Tpl lang'
+        type: text
+        searchable: true
+        sortable: true
+    style_lang:
+        label: 'Style lang'
+        type: text
+        searchable: true
+        sortable: true

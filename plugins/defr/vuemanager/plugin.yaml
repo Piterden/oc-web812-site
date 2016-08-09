@@ -1,0 +1,28 @@
+plugin:
+    name: 'defr.vuemanager::lang.plugin.name'
+    description: 'defr.vuemanager::lang.plugin.description'
+    author: 'Denis Efremov'
+    icon: oc-icon-rebel
+    homepage: ''
+navigation:
+    vuemanager:
+        label: Vue
+        url: defr/vuemanager/components
+        icon: icon-rebel
+        sideMenu:
+            vue-components:
+                label: 'Vue Components'
+                url: defr/vuemanager/components
+                icon: icon-qrcode
+            vue-pages:
+                label: 'Vue Router Pages'
+                url: defr/vuemanager/pages
+                icon: icon-paragraph
+            vue-javascripts:
+                label: 'Javascript Files'
+                url: defr/vuemanager/javascripts
+                icon: icon-jsfiddle
+            vue-configs:
+                label: 'Compiler Configs'
+                url: defr/vuemanager/configs
+                icon: icon-linux

@@ -1,0 +1,89 @@
+description = "Single Page Application"
+
+[vueLayout]
+root_element_id = "#app"
+enable_routing = 1
+router_options[hashbang] = "true"
+router_options[mode] = "html5"
+router_options[linkActiveClass] = "active"
+==
+<!DOCTYPE html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+    
+        <link rel="stylesheet" href="{{[
+            'assets/dist/semantic.min.css',
+            'assets/less/magic.less'
+        ]|theme }}" />
+        {% styles %}
+    </head>
+    <body id="app" class="pusher">
+        <!-- FOLLOWING MENU -->
+        <div class="ui large top fixed hidden menu">
+            <div class="ui container">
+                <div href="#" class="header item">
+                    <img class="logo" src="{{ 'assets/images/semantic-october.png'|theme }}">
+                </div>
+                <a v-link="/" class="active item">Home</a>
+                <a v-link="/foo" class="item">Foo</a>
+                <a v-link="/bar" class="item">Bar</a>
+                <div class="right menu">
+                    <div class="item">
+                        <a class="ui orange button">Contact us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SIDEBAR MENU -->
+        <div class="ui vertical inverted sidebar menu">
+            <a v-link="/" class="active item">Home</a>
+            <a v-link="/foo" class="item">Foo</a>
+            <a v-link="/bar" class="item">Bar</a>
+        </div>
+        
+        <div class="ui inverted vertical masthead center aligned segment">
+            <div class="ui container">
+                <div class="ui large secondary inverted pointing menu">
+                    <a class="toc item">
+                        <i class="sidebar icon"></i>
+                    </a>
+                    <a v-link="'/'" class="active item">Home</a>
+                    <a v-link="'/foo'" class="item">Foo</a>
+                    <a v-link="'/bar'" class="item">Bar</a>
+                    <div class="right item">
+                        <a class="ui inverted button">Contact us</a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui text container">
+                <h1 class="ui inverted header">
+                    Semantic October
+                </h1>
+                <h2>A Semantic UI theme for OctoberCMS.</h2>
+                <div class="ui huge orange start button">Get started <i class="right arrow icon"></i></div>
+            </div>
+        </div>
+
+        <!-- Add your magic here -->
+        <router-view>{% page %}</router-view>
+        
+        <script src="{{[
+            'assets/js/vendor/jquery.min.js',
+            'assets/dist/semantic.min.js',
+            'assets/js/magic.js',
+        ]|theme }}"></script>
+        {% framework extras %}
+        {% scripts %}
+        
+        {% component 'vueLayout' %}
+    </body>
+</html>

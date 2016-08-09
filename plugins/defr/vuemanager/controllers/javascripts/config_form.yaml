@@ -1,0 +1,11 @@
+name: 'Vue Javascripts'
+modelClass: DEfr\VueManager\Models\Javascript
+form: $/defr/vuemanager/models/javascript/fields.yaml
+defaultRedirect: defr/vuemanager/javascripts
+create:
+    redirect: 'defr/vuemanager/javascripts/update/:id'
+    redirectClose: defr/vuemanager/javascripts
+update:
+    redirect: defr/vuemanager/javascripts
+    redirectClose: defr/vuemanager/javascripts
+preview: {  }

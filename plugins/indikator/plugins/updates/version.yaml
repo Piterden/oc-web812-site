@@ -1,0 +1,22 @@
+1.0.0:
+    - First version of Frontend Plugins.
+    - create_plugins_table.php
+1.0.1: Minor improvements and bugfixes.
+1.0.2: Added prefix to database.
+1.0.3: Changed the first bar chart to pie.
+1.0.4: Improved the widget exception handling.
+1.0.5: Added the image statistics.
+1.0.6: Redesigned the statistics.
+1.0.7: Added the permission setting.
+1.0.8: Improvements and bug fixes.
+1.0.9: Minor improvements.
+1.1.0: Added the Font option for Type.
+1.1.1: Minor UI improvements.
+1.2.0: Added the plugin detection feature.
+1.2.1: Added the description for plugins.
+1.2.2: Improved the plugin detection.
+1.2.3: Support more front-end plugins.
+1.2.4: Detect the version from files.
+1.2.5:
+    - Improved the plugin detection.
+    - update_timestamp_nullable.php

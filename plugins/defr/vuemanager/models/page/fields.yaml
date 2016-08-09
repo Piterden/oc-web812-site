@@ -1,0 +1,70 @@
+fields:
+    name:
+        label: Name
+        span: auto
+        placeholder: vue-component
+        required: 1
+        type: text
+        comment: 'Name of Vue component'
+    filename:
+        label: Filename
+        span: auto
+        placeholder: '*.vue'
+        required: 1
+        dependsOn:
+            - name
+        preset:
+            field: name
+            type: camel
+        type: text
+        comment: 'Path relative to theme path'
+tabs:
+    fields:
+        template_lang:
+            label: 'Template language'
+            oc.commentPosition: ''
+            span: right
+            placeholder: 'html | jade'
+            default: html
+            required: 1
+            type: text
+            tab: Template
+        template:
+            label: Template
+            size: large
+            language: twig
+            span: full
+            type: codeeditor
+            commentAbove: 'Vue template'
+            tab: Template
+        style_lang:
+            label: 'Style language'
+            oc.commentPosition: ''
+            span: right
+            placeholder: 'css | sass'
+            default: css
+            required: 1
+            type: text
+            tab: Style
+        style_scoped:
+            label: 'Style scoped'
+            span: left
+            type: checkbox
+            tab: Style
+        style:
+            label: Style
+            size: large
+            language: css
+            span: full
+            type: codeeditor
+            commentAbove: 'Vue style. Expected plain CSS without <STYLE> tag.'
+            tab: Style
+        script:
+            label: Script
+            size: large
+            language: javascript
+            span: full
+            type: codeeditor
+            commentAbove: 'Vue script. Expected plain JS without <SCRIPT> tag.'
+            default: '<script></script>'
+            tab: Script
