@@ -1,0 +1,26 @@
+fields:
+    section:
+        label: 'Security'
+        span: full
+        type: section
+
+    https:
+        label: 'Enable HTTPS Rounting'
+        comment: 'Route all frontend and backend pages with https security only if you installed a SSL Certificate.'
+        span: full
+        type: switch
+
+    ips:
+        label: 'Banned IPs'
+        span: full
+        type: repeater
+        form:
+            fields:
+                description:
+                    label: 'Short Description'
+                    span: auto
+                ip:
+                    label: 'IPv4 Address'
+                    placeholder: 'ex: 127.0.0.1'
+                    span: auto
+                    type: text

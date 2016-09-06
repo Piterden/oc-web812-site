@@ -1,12 +1,12 @@
 <?php namespace Cms\Classes;
 
-use URL;
+use Cms;
+use Url;
 use Str;
 use App;
 use File;
 use View;
 use Lang;
-use Route;
 use Event;
 use Config;
 use Session;
@@ -1124,19 +1124,7 @@ class Controller
             return null;
         }
 
-        if (substr($url, 0, 1) == '/') {
-            $url = substr($url, 1);
-        }
-
-        $routeAction = 'Cms\Classes\CmsController@run';
-        $actionExists = Route::getRoutes()->getByAction($routeAction) !== null;
-
-        if ($actionExists) {
-            return URL::action($routeAction, ['slug' => $url]);
-        }
-        else {
-            return URL::to($url);
-        }
+        return Cms::url($url);
     }
 
     /**
@@ -1165,14 +1153,14 @@ class Controller
         $themeDir = $this->getTheme()->getDirName();
 
         if (is_array($url)) {
-            $_url = URL::to(CombineAssets::combine($url, themes_path().'/'.$themeDir));
+            $_url = Url::to(CombineAssets::combine($url, themes_path().'/'.$themeDir));
         }
         else {
             $_url = Config::get('cms.themesPath', '/themes').'/'.$themeDir;
             if ($url !== null) {
                 $_url .= '/'.$url;
             }
-            $_url = URL::asset($_url);
+            $_url = Url::asset($_url);
         }
 
         return $_url;
@@ -1268,13 +1256,13 @@ class Controller
     public function findComponentByHandler($handler)
     {
         foreach ($this->page->components as $component) {
-            if (method_exists($component, $handler)) {
+            if ($component->methodExists($handler)) {
                 return $component;
             }
         }
 
         foreach ($this->layout->components as $component) {
-            if (method_exists($component, $handler)) {
+            if ($component->methodExists($handler)) {
                 return $component;
             }
         }

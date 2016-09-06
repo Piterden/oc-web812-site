@@ -3393,8 +3393,8 @@ $.fn.ocPopover.Constructor=Popover
 $.fn.ocPopover.noConflict=function(){$.fn.ocPopover=old
 return this}
 $(document).on('click','[data-control=popover]',function(e){$(this).ocPopover()
-return false;})}(window.jQuery);+function($){"use strict";var Popup=function(element,options){var self=this
-this.options=options
+return false;})}(window.jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+var Popup=function(element,options){this.options=options
 this.$el=$(element)
 this.$container=null
 this.$modal=null
@@ -3406,28 +3406,17 @@ this.$container=this.createPopupContainer()
 this.$content=this.$container.find('.modal-content:first')
 this.$dialog=this.$container.find('.modal-dialog:first')
 this.$modal=this.$container.modal({show:false,backdrop:false,keyboard:this.options.keyboard})
-this.$container.data('oc.popup',this)
-this.$modal.on('hide.bs.modal',function(){self.triggerEvent('hide.oc.popup')
-self.isOpen=false
-self.setBackdrop(false)})
-this.$modal.on('hidden.bs.modal',function(){self.triggerEvent('hidden.oc.popup')
-self.$container.remove()
-self.$el.data('oc.popup',null)
-$(document.body).removeClass('modal-open')})
-this.$modal.on('show.bs.modal',function(){self.isOpen=true
-self.setBackdrop(true)
-$(document.body).addClass('modal-open')})
-this.$modal.on('shown.bs.modal',function(){self.triggerEvent('shown.oc.popup')})
-this.$modal.on('close.oc.popup',function(){self.hide()
-return false})
+$.oc.foundation.controlUtils.markDisposable(element)
+Base.call(this)
+this.initEvents()
 this.init()}
+Popup.prototype=Object.create(BaseProto)
+Popup.prototype.constructor=Popup
 Popup.DEFAULTS={ajax:null,handler:null,keyboard:true,extraData:{},content:null,size:null,adaptiveHeight:false,zIndex:null}
 Popup.prototype.init=function(){var self=this
-if(self.isOpen)
-return
+if(self.isOpen)return
 this.setBackdrop(true)
-if(!this.options.content)
-this.setLoading(true)
+if(!this.options.content){this.setLoading(true)}
 if(this.options.handler){this.$el.request(this.options.handler,{data:paramToObj('data-extra-data',this.options.extraData),success:function(data,textStatus,jqXHR){this.success(data,textStatus,jqXHR).done(function(){self.setContent(data.result)
 $(window).trigger('ajaxUpdateComplete',[this,data,textStatus,jqXHR])
 self.triggerEvent('popupComplete')
@@ -3437,6 +3426,36 @@ self.triggerEvent('error.oc.popup')})}})}
 else if(this.options.ajax){$.ajax({url:this.options.ajax,data:paramToObj('data-extra-data',this.options.extraData),success:function(data){self.setContent(data)},cache:false})}
 else if(this.options.content){var content=typeof this.options.content=='function'?this.options.content.call(this.$el[0],this):this.options.content
 this.setContent(content)}}
+Popup.prototype.initEvents=function(){var self=this
+this.$container.data('oc.popup',this)
+this.$modal.on('hide.bs.modal',function(){self.triggerEvent('hide.oc.popup')
+self.isOpen=false
+self.setBackdrop(false)})
+this.$modal.on('hidden.bs.modal',function(){self.triggerEvent('hidden.oc.popup')
+self.$container.remove()
+$(document.body).removeClass('modal-open')
+self.dispose()})
+this.$modal.on('show.bs.modal',function(){self.isOpen=true
+self.setBackdrop(true)
+$(document.body).addClass('modal-open')})
+this.$modal.on('shown.bs.modal',function(){self.triggerEvent('shown.oc.popup')})
+this.$modal.on('close.oc.popup',function(){self.hide()
+return false})}
+Popup.prototype.dispose=function(){this.$modal.off('hide.bs.modal')
+this.$modal.off('hidden.bs.modal')
+this.$modal.off('show.bs.modal')
+this.$modal.off('shown.bs.modal')
+this.$modal.off('close.oc.popup')
+this.$el.off('dispose-control',this.proxy(this.dispose))
+this.$el.removeData('oc.popup')
+this.$container.removeData('oc.popup')
+this.$container=null
+this.$content=null
+this.$dialog=null
+this.$modal=null
+this.$el=null
+this.options=null
+BaseProto.dispose.call(this)}
 Popup.prototype.createPopupContainer=function(){var
 modal=$('<div />').prop({class:'control-popup modal fade',role:'dialog',tabindex:-1}),modalDialog=$('<div />').addClass('modal-dialog'),modalContent=$('<div />').addClass('modal-content')
 if(this.options.size)
@@ -3453,8 +3472,7 @@ this.firstDiv=this.$content.find('>div:first')
 if(this.firstDiv.length>0)
 this.firstDiv.data('oc.popup',this)
 var $defaultFocus=$('[default-focus]',this.$content)
-if($defaultFocus.is(":visible"))
-{window.setTimeout(function(){$defaultFocus.focus()
+if($defaultFocus.is(":visible")){window.setTimeout(function(){$defaultFocus.focus()
 $defaultFocus=null},300)}}
 Popup.prototype.setBackdrop=function(val){if(val&&!this.$backdrop){this.$backdrop=$('<div class="popup-backdrop fade" />')
 if(this.options.zIndex!==null)
@@ -3468,16 +3486,17 @@ Popup.prototype.setLoading=function(val){if(!this.$backdrop)
 return;var self=this
 if(val){setTimeout(function(){self.$backdrop.addClass('loading');},100)}
 else{this.$backdrop.removeClass('loading');}}
+Popup.prototype.setShake=function(){var self=this
+this.$content.addClass('popup-shaking')
+setTimeout(function(){self.$content.removeClass('popup-shaking')},1000)}
 Popup.prototype.hideLoading=function(val){this.setLoading(false)
 var self=this
 setTimeout(function(){self.setBackdrop(false)},250)
 setTimeout(function(){self.hide()},500)}
-Popup.prototype.triggerEvent=function(eventName,params){if(!params)
-params=[this.$el,this.$modal]
+Popup.prototype.triggerEvent=function(eventName,params){if(!params){params=[this.$el,this.$modal]}
 var eventObject=jQuery.Event(eventName,{relatedTarget:this.$container.get(0)})
 this.$el.trigger(eventObject,params)
-if(this.firstDiv)
-this.firstDiv.trigger(eventObject,params)}
+if(this.firstDiv){this.firstDiv.trigger(eventObject,params)}}
 Popup.prototype.reload=function(){this.init()}
 Popup.prototype.show=function(){this.$modal.modal('show')
 this.$modal.on('click.dismiss.popup','[data-dismiss="popup"]',$.proxy(this.hide,this))
@@ -3489,10 +3508,8 @@ this.triggerEvent('hide.oc.popup')
 if(this.allowHide)
 this.$modal.modal('hide')
 this.$dialog.css('transform','')}
-Popup.prototype.visible=function(val){if(val)
-this.$modal.addClass('in')
-else
-this.$modal.removeClass('in')
+Popup.prototype.visible=function(val){if(val){this.$modal.addClass('in')}
+else{this.$modal.removeClass('in')}
 this.setBackdrop(val)}
 Popup.prototype.toggle=function(){this.triggerEvent('popupToggle',[this.$modal])
 this.triggerEvent('toggle.oc.popup',[this.$modal])
@@ -3517,7 +3534,7 @@ catch(e){throw new Error('Error parsing the '+name+' attribute value. '+e)}}
 $(document).on('click.oc.popup','[data-control="popup"]',function(event){event.preventDefault()
 $(this).popup()});$(document).on('ajaxPromise','[data-popup-load-indicator]',function(event,context){if($(this).data('request')!=context.handler)return
 $(this).closest('.control-popup').removeClass('in').popup('setLoading',true)}).on('ajaxFail','[data-popup-load-indicator]',function(event,context){if($(this).data('request')!=context.handler)return
-$(this).closest('.control-popup').addClass('in').popup('setLoading',false)}).on('ajaxDone','[data-popup-load-indicator]',function(event,context){if($(this).data('request')!=context.handler)return
+$(this).closest('.control-popup').addClass('in').popup('setLoading',false).popup('setShake')}).on('ajaxDone','[data-popup-load-indicator]',function(event,context){if($(this).data('request')!=context.handler)return
 $(this).closest('.control-popup').popup('hideLoading')})}(window.jQuery);+function($){"use strict";var ChartUtils=function(){}
 ChartUtils.prototype.defaultValueColor='#b8b8b8';ChartUtils.prototype.getColor=function(index){var
 colors=['#95b753','#cc3300','#e5a91a','#3366ff','#ff0f00','#ff6600','#ff9e01','#fcd202','#f8ff01','#b0de09','#04d215','#0d8ecf','#0d52d1','#2a0cd0','#8a0ccf','#cd0d74','#754deb','#dddddd','#999999','#333333','#000000','#57032a','#ca9726','#990000','#4b0c25'],colorIndex=index%(colors.length-1);return colors[colorIndex];}
@@ -3695,14 +3712,13 @@ this.$el=$(element)
 var tr=this.$el.prop('tagName')=='TR'?this.$el:this.$el.find('tr:has(td)')
 tr.each(function(){var link=$(this).find(options.target).filter(function(){return!$(this).closest('td').hasClass(options.excludeClass)&&!$(this).hasClass(options.excludeClass)}).first()
 if(!link.length)return
-var href=link.attr('href'),onclick=(typeof link.get(0).onclick=="function")?link.get(0).onclick:null
-$(this).find('td').not('.'+options.excludeClass).click(function(e){if($(document.body).hasClass('drag'))
-return
-if(onclick)
-onclick.apply(link.get(0))
-else if(e.ctrlKey)
-window.open(href);else
-window.location=href;})
+var href=link.attr('href'),onclick=(typeof link.get(0).onclick=="function")?link.get(0).onclick:null,popup=link.is('[data-control=popup]'),request=link.is('[data-request]')
+$(this).find('td').not('.'+options.excludeClass).click(function(e){if($(document.body).hasClass('drag')){return}
+if(onclick){onclick.apply(link.get(0))}
+else if(request){link.request()}
+else if(popup){link.popup()}
+else if(e.ctrlKey){window.open(href)}
+else{window.location=href}})
 $(this).addClass(options.linkedClass)
 link.hide().after(link.html())})}
 RowLink.DEFAULTS={target:'a',excludeClass:'nolink',linkedClass:'rowlink'}
@@ -3840,7 +3856,7 @@ if(typeof option=='string')data[option].apply(data,args)})}
 $.fn.hotKey.Constructor=HotKey
 $.fn.hotKey.noConflict=function(){$.fn.hotKey=old
 return this}
-$(document).render(function(){$('[data-hotkey]').hotKey()})}(window.jQuery);+function($){"use strict";var LATIN_MAP={'À':'A','Á':'A','Â':'A','Ã':'A','Ä':'A','Å':'A','Æ':'AE','Ç':'C','È':'E','É':'E','Ê':'E','Ë':'E','Ì':'I','Í':'I','Î':'I','Ï':'I','Ð':'D','Ñ':'N','Ò':'O','Ó':'O','Ô':'O','Õ':'O','Ö':'O','Ő':'O','Ø':'O','Ù':'U','Ú':'U','Û':'U','Ü':'U','Ű':'U','Ý':'Y','Þ':'TH','Ÿ':'Y','ß':'ss','à':'a','á':'a','â':'a','ã':'a','ä':'a','å':'a','æ':'ae','ç':'c','è':'e','é':'e','ê':'e','ë':'e','ì':'i','í':'i','î':'i','ï':'i','ð':'d','ñ':'n','ò':'o','ó':'o','ô':'o','õ':'o','ö':'o','ő':'o','ø':'o','ō':'o','œ':'oe','ù':'u','ú':'u','û':'u','ü':'u','ű':'u','ý':'y','þ':'th','ÿ':'y'},LATIN_SYMBOLS_MAP={'©':'(c)'},GREEK_MAP={'α':'a','β':'b','γ':'g','δ':'d','ε':'e','ζ':'z','η':'h','θ':'8','ι':'i','κ':'k','λ':'l','μ':'m','ν':'n','ξ':'3','ο':'o','π':'p','ρ':'r','σ':'s','τ':'t','υ':'y','φ':'f','χ':'x','ψ':'ps','ω':'w','ά':'a','έ':'e','ί':'i','ό':'o','ύ':'y','ή':'h','ώ':'w','ς':'s','ϊ':'i','ΰ':'y','ϋ':'y','ΐ':'i','Α':'A','Β':'B','Γ':'G','Δ':'D','Ε':'E','Ζ':'Z','Η':'H','Θ':'8','Ι':'I','Κ':'K','Λ':'L','Μ':'M','Ν':'N','Ξ':'3','Ο':'O','Π':'P','Ρ':'R','Σ':'S','Τ':'T','Υ':'Y','Φ':'F','Χ':'X','Ψ':'PS','Ω':'W','Ά':'A','Έ':'E','Ί':'I','Ό':'O','Ύ':'Y','Ή':'H','Ώ':'W','Ϊ':'I','Ϋ':'Y'},TURKISH_MAP={'ş':'s','Ş':'S','ı':'i','İ':'I','ç':'c','Ç':'C','ü':'u','Ü':'U','ö':'o','Ö':'O','ğ':'g','Ğ':'G'},RUSSIAN_MAP={'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z','и':'i','й':'j','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'c','ч':'ch','ш':'sh','щ':'sh','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya','А':'A','Б':'B','В':'V','Г':'G','Д':'D','Е':'E','Ё':'Yo','Ж':'Zh','З':'Z','И':'I','Й':'J','К':'K','Л':'L','М':'M','Н':'N','О':'O','П':'P','Р':'R','С':'S','Т':'T','У':'U','Ф':'F','Х':'H','Ц':'C','Ч':'Ch','Ш':'Sh','Щ':'Sh','Ъ':'','Ы':'Y','Ь':'','Э':'E','Ю':'Yu','Я':'Ya'},UKRAINIAN_MAP={'Є':'Ye','І':'I','Ї':'Yi','Ґ':'G','є':'ye','і':'i','ї':'yi','ґ':'g'},CZECH_MAP={'č':'c','ď':'d','ě':'e','ň':'n','ř':'r','š':'s','ť':'t','ů':'u','ž':'z','Č':'C','Ď':'D','Ě':'E','Ň':'N','Ř':'R','Š':'S','Ť':'T','Ů':'U','Ž':'Z'},POLISH_MAP={'ą':'a','ć':'c','ę':'e','ł':'l','ń':'n','ó':'o','ś':'s','ź':'z','ż':'z','Ą':'A','Ć':'C','Ę':'E','Ł':'L','Ń':'N','Ó':'O','Ś':'S','Ź':'Z','Ż':'Z'},LATVIAN_MAP={'ā':'a','č':'c','ē':'e','ģ':'g','ī':'i','ķ':'k','ļ':'l','ņ':'n','š':'s','ū':'u','ž':'z','Ā':'A','Č':'C','Ē':'E','Ģ':'G','Ī':'I','Ķ':'K','Ļ':'L','Ņ':'N','Š':'S','Ū':'U','Ž':'Z'},ARABIC_MAP={'أ':'a','ب':'b','ت':'t','ث':'th','ج':'g','ح':'h','خ':'kh','د':'d','ذ':'th','ر':'r','ز':'z','س':'s','ش':'sh','ص':'s','ض':'d','ط':'t','ظ':'th','ع':'aa','غ':'gh','ف':'f','ق':'k','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','و':'o','ي':'y'},PERSIAN_MAP={'آ':'a','ا':'a','پ':'p','چ':'ch','ژ':'zh','ک':'k','گ':'gh','ی':'y'},LITHUANIAN_MAP={'ą':'a','č':'c','ę':'e','ė':'e','į':'i','š':'s','ų':'u','ū':'u','ž':'z','Ą':'A','Č':'C','Ę':'E','Ė':'E','Į':'I','Š':'S','Ų':'U','Ū':'U','Ž':'Z'},SERBIAN_MAP={'ђ':'dj','ј':'j','љ':'lj','њ':'nj','ћ':'c','џ':'dz','đ':'dj','Ђ':'Dj','Ј':'j','Љ':'Lj','Њ':'Nj','Ћ':'C','Џ':'Dz','Đ':'Dj'},AZERBAIJANI_MAP={'ç':'c','ə':'e','ğ':'g','ı':'i','ö':'o','ş':'s','ü':'u','Ç':'C','Ə':'E','Ğ':'G','İ':'I','Ö':'O','Ş':'S','Ü':'U'},SPECIFIC_MAPS={'de':{'Ä':'AE','Ö':'OE','Ü':'UE','ä':'ae','ö':'oe','ü':'ue'}},ALL_MAPS=[LATIN_MAP,LATIN_SYMBOLS_MAP,GREEK_MAP,TURKISH_MAP,RUSSIAN_MAP,UKRAINIAN_MAP,CZECH_MAP,POLISH_MAP,LATVIAN_MAP,ARABIC_MAP,PERSIAN_MAP,LITHUANIAN_MAP,SERBIAN_MAP,AZERBAIJANI_MAP]
+$(document).render(function(){$('[data-hotkey]').hotKey()})}(window.jQuery);+function($){"use strict";var LATIN_MAP={'À':'A','Á':'A','Â':'A','Ã':'A','Ä':'A','Å':'A','Æ':'AE','Ç':'C','È':'E','É':'E','Ê':'E','Ë':'E','Ì':'I','Í':'I','Î':'I','Ï':'I','Ð':'D','Ñ':'N','Ò':'O','Ó':'O','Ô':'O','Õ':'O','Ö':'O','Ő':'O','Ø':'O','Ù':'U','Ú':'U','Û':'U','Ü':'U','Ű':'U','Ý':'Y','Þ':'TH','Ÿ':'Y','ß':'ss','à':'a','á':'a','â':'a','ã':'a','ä':'a','å':'a','æ':'ae','ç':'c','è':'e','é':'e','ê':'e','ë':'e','ì':'i','í':'i','î':'i','ï':'i','ð':'d','ñ':'n','ò':'o','ó':'o','ô':'o','õ':'o','ö':'o','ő':'o','ø':'o','ō':'o','œ':'oe','ù':'u','ú':'u','û':'u','ü':'u','ű':'u','ý':'y','þ':'th','ÿ':'y'},LATIN_SYMBOLS_MAP={'©':'(c)'},GREEK_MAP={'α':'a','β':'b','γ':'g','δ':'d','ε':'e','ζ':'z','η':'h','θ':'8','ι':'i','κ':'k','λ':'l','μ':'m','ν':'n','ξ':'3','ο':'o','π':'p','ρ':'r','σ':'s','τ':'t','υ':'y','φ':'f','χ':'x','ψ':'ps','ω':'w','ά':'a','έ':'e','ί':'i','ό':'o','ύ':'y','ή':'h','ώ':'w','ς':'s','ϊ':'i','ΰ':'y','ϋ':'y','ΐ':'i','Α':'A','Β':'B','Γ':'G','Δ':'D','Ε':'E','Ζ':'Z','Η':'H','Θ':'8','Ι':'I','Κ':'K','Λ':'L','Μ':'M','Ν':'N','Ξ':'3','Ο':'O','Π':'P','Ρ':'R','Σ':'S','Τ':'T','Υ':'Y','Φ':'F','Χ':'X','Ψ':'PS','Ω':'W','Ά':'A','Έ':'E','Ί':'I','Ό':'O','Ύ':'Y','Ή':'H','Ώ':'W','Ϊ':'I','Ϋ':'Y'},TURKISH_MAP={'ş':'s','Ş':'S','ı':'i','İ':'I','ç':'c','Ç':'C','ü':'u','Ü':'U','ö':'o','Ö':'O','ğ':'g','Ğ':'G'},RUSSIAN_MAP={'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z','и':'i','й':'j','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'c','ч':'ch','ш':'sh','щ':'sh','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya','А':'A','Б':'B','В':'V','Г':'G','Д':'D','Е':'E','Ё':'Yo','Ж':'Zh','З':'Z','И':'I','Й':'J','К':'K','Л':'L','М':'M','Н':'N','О':'O','П':'P','Р':'R','С':'S','Т':'T','У':'U','Ф':'F','Х':'H','Ц':'C','Ч':'Ch','Ш':'Sh','Щ':'Sh','Ъ':'','Ы':'Y','Ь':'','Э':'E','Ю':'Yu','Я':'Ya'},UKRAINIAN_MAP={'Є':'Ye','І':'I','Ї':'Yi','Ґ':'G','є':'ye','і':'i','ї':'yi','ґ':'g'},CZECH_MAP={'č':'c','ď':'d','ě':'e','ň':'n','ř':'r','š':'s','ť':'t','ů':'u','ž':'z','Č':'C','Ď':'D','Ě':'E','Ň':'N','Ř':'R','Š':'S','Ť':'T','Ů':'U','Ž':'Z'},POLISH_MAP={'ą':'a','ć':'c','ę':'e','ł':'l','ń':'n','ó':'o','ś':'s','ź':'z','ż':'z','Ą':'A','Ć':'C','Ę':'E','Ł':'L','Ń':'N','Ó':'O','Ś':'S','Ź':'Z','Ż':'Z'},LATVIAN_MAP={'ā':'a','č':'c','ē':'e','ģ':'g','ī':'i','ķ':'k','ļ':'l','ņ':'n','š':'s','ū':'u','ž':'z','Ā':'A','Č':'C','Ē':'E','Ģ':'G','Ī':'I','Ķ':'K','Ļ':'L','Ņ':'N','Š':'S','Ū':'U','Ž':'Z'},ARABIC_MAP={'أ':'a','ب':'b','ت':'t','ث':'th','ج':'g','ح':'h','خ':'kh','د':'d','ذ':'th','ر':'r','ز':'z','س':'s','ش':'sh','ص':'s','ض':'d','ط':'t','ظ':'th','ع':'aa','غ':'gh','ف':'f','ق':'k','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','و':'o','ي':'y'},PERSIAN_MAP={'آ':'a','ا':'a','پ':'p','چ':'ch','ژ':'zh','ک':'k','گ':'gh','ی':'y'},LITHUANIAN_MAP={'ą':'a','č':'c','ę':'e','ė':'e','į':'i','š':'s','ų':'u','ū':'u','ž':'z','Ą':'A','Č':'C','Ę':'E','Ė':'E','Į':'I','Š':'S','Ų':'U','Ū':'U','Ž':'Z'},SERBIAN_MAP={'ђ':'dj','ј':'j','љ':'lj','њ':'nj','ћ':'c','џ':'dz','đ':'dj','Ђ':'Dj','Ј':'j','Љ':'Lj','Њ':'Nj','Ћ':'C','Џ':'Dz','Đ':'Dj'},AZERBAIJANI_MAP={'ç':'c','ə':'e','ğ':'g','ı':'i','ö':'o','ş':'s','ü':'u','Ç':'C','Ə':'E','Ğ':'G','İ':'I','Ö':'O','Ş':'S','Ü':'U'},ROMANIAN_MAP={'ă':'a','â':'a','î':'i','ș':'s','ț':'t','Ă':'A','Â':'A','Î':'I','Ș':'S','Ț':'T'},SPECIFIC_MAPS={'de':{'Ä':'AE','Ö':'OE','Ü':'UE','ä':'ae','ö':'oe','ü':'ue'}},ALL_MAPS=[LATIN_MAP,LATIN_SYMBOLS_MAP,GREEK_MAP,TURKISH_MAP,RUSSIAN_MAP,UKRAINIAN_MAP,CZECH_MAP,POLISH_MAP,LATVIAN_MAP,ARABIC_MAP,PERSIAN_MAP,LITHUANIAN_MAP,SERBIAN_MAP,AZERBAIJANI_MAP,ROMANIAN_MAP]
 var removeList=["a","an","as","at","before","but","by","for","from","is","in","into","like","of","off","on","onto","per","since","than","the","this","that","to","up","via","with"]
 var locale=$('meta[name="backend-locale"]').attr('content')
 var Downcoder={Initialize:function(){if(Downcoder.map){return;}
@@ -3883,7 +3899,8 @@ $el.val(prefix+self.formatValue())})
 this.$el.on('change',function(){self.cancelled=true})}
 InputPreset.prototype.formatNamespace=function(){var value=toCamel(this.$src.val())
 return value.substr(0,1).toUpperCase()+value.substr(1)}
-InputPreset.prototype.formatValue=function(){if(this.options.inputPresetType=='namespace'){return this.formatNamespace()}
+InputPreset.prototype.formatValue=function(){if(this.options.inputPresetType=='exact'){return this.$src.val();}
+else if(this.options.inputPresetType=='namespace'){return this.formatNamespace()}
 if(this.options.inputPresetType=='camel'){var value=toCamel(this.$src.val())}
 else{var value=slugify(this.$src.val())}
 if(this.options.inputPresetType=='url'){value='/'+value}

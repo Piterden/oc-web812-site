@@ -3,6 +3,8 @@ namespace DEfr\VueTranslator;
 
 use Event;
 use Backend;
+use Cms\Classes\Page;
+use Cms\Classes\Partial;
 use System\Classes\PluginBase;
 
 /**
@@ -44,22 +46,24 @@ class Plugin extends PluginBase
     {
         Event::listen('cms.template.save', function ($ctrl, $template, $type)
         {
-            $dirName   = $template->getObjectTypeDirName();
-            $themePath = $template->theme->getPath().'/';
-            $baseName  = $template->getBaseFileName();
-            $fileName = $this->toCamelCase($baseName);
+            if ($template instanceOf Page || $template instanceOf Partial) {
+                $dirName   = $template->getObjectTypeDirName();
+                $themePath = $template->theme->getPath().'/';
+                $baseName  = $template->getBaseFileName();
+                $fileName = $this->toCamelCase($baseName);
 
-            if ($dirName == 'pages')
-            {
-                $fileName .= 'Page.vue';
-            }
-            elseif ($dirName == 'partials')
-            {
-                $fileName .= '.vue';
-            }
+                if ($dirName == 'pages')
+                {
+                    $fileName .= 'Page.vue';
+                }
+                elseif ($dirName == 'partials')
+                {
+                    $fileName .= '.vue';
+                }
 
-            $vuePath = $themePath.'src/'.$dirName.'/'.$fileName;
-            file_put_contents($vuePath, $template->markup);
+                $vuePath = $themePath.'assets/'.$dirName.'/'.$fileName;
+                file_put_contents($vuePath, $template->markup);
+            }
         });
     }
 

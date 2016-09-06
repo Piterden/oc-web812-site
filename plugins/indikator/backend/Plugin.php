@@ -2,6 +2,7 @@
 
 use System\Classes\PluginBase;
 use System\Classes\PluginManager;
+use System\Classes\SettingsManager;
 use Backend\Classes\Controller as BackendController;
 use Backend;
 use BackendAuth;
@@ -20,6 +21,20 @@ class Plugin extends PluginBase
             'author'      => 'indikator.backend::lang.plugin.author',
             'icon'        => 'icon-cogs',
             'homepage'    => 'https://github.com/gergo85/oc-backend-plus'
+        ];
+    }
+
+    public function registerSettings()
+    {
+        return [
+            'trash' => [
+                'label'       => 'indikator.backend::lang.trash.title',
+                'description' => 'indikator.backend::lang.trash.description',
+                'icon'        => 'icon-eraser',
+                'permissions' => ['indikator.backend.trash'],
+                'url'         => Backend::url('indikator/backend/trash'),
+                'category'    => SettingsManager::CATEGORY_SYSTEM
+            ]
         ];
     }
 
@@ -95,9 +110,19 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerPermissions()
+    {
+        return [
+            'indikator.backend.trash' => [
+                'tab'   => 'indikator.backend::lang.plugin.name',
+                'label' => 'indikator.backend::lang.trash.permission'
+            ]
+        ];
+    }
+
     public function boot()
     {
-        if ((bool)File::get('plugins/indikator/backend/assets/gzip.txt')) {
+        if ((bool)File::get(base_path().'/plugins/indikator/backend/assets/gzip.txt')) {
             ob_start('ob_gzhandler');
         }
 
@@ -231,10 +256,10 @@ class Plugin extends PluginBase
                 }
 
                 if (isset($preferences['enabled_gzip']) && $preferences['enabled_gzip']) {
-                    File::put('plugins/indikator/backend/assets/gzip.txt', 1);
+                    File::put(base_path().'/plugins/indikator/backend/assets/gzip.txt', 1);
                 }
                 else {
-                    File::put('plugins/indikator/backend/assets/gzip.txt', 0);
+                    File::put(base_path().'/plugins/indikator/backend/assets/gzip.txt', 0);
                 }
             }
         });

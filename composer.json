@@ -31,8 +31,8 @@
         "october/cms": "~1.0",
         "laravel/framework": "5.1.*",
         "wikimedia/composer-merge-plugin": "dev-master",
-        "jasonlewis/resource-watcher": "1.2.*",
-        "pusher/pusher-php-server": "~2.0"
+        "pusher/pusher-php-server": "~2.0",
+        "recca0120/terminal": "~1.5.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -4,11 +4,26 @@ use DB;
 use Flash;
 use Event;
 use Backend;
+use Redirect;
 use System\Classes\PluginBase;
 use NetSTI\Backend\Classes\Helper;
 use Backend\Classes\Controller as BackendController;
 
 class Plugin extends PluginBase{
+
+	// SETTINGS
+	public function registerSettings(){
+		return [
+			'security'           => [
+				'label'       => 'Security',
+				'description' => 'Ban IPs, manage backend and frontend https routing',
+				'icon'        => 'icon-shield',
+				'class'       => 'NetSTI\Backend\Models\Security',
+				'order'       => 103,
+				'keywords'    => 'security https backend frontend'
+			]
+		];
+	}
 	public function boot(){
 		Event::listen('backend.menu.extendItems', function($manager) {
 
@@ -51,6 +66,8 @@ class Plugin extends PluginBase{
 
 			if($coreBuild >= 346){
 				Helper::patchFile($cms_config);
+				Flash::success('The theme was installed!');
+				Redirect::refresh();
 			}else{
 				BackendController::extend(function($controller){
 					$controller->addCss('/plugins/netsti/backend/assets/css/font.css');

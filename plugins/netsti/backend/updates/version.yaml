@@ -4,3 +4,5 @@
     - 'Add Sidebar options to User plugin'
 1.0.3:
     - 'Updated to the last Build of October (Stable Release)'
+1.0.4:
+    - 'HTTPS rounting option and banned ip control (Security Setting)'

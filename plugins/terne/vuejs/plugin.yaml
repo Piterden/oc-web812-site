@@ -1,6 +1,0 @@
-plugin:
-    name: 'terne.vuejs::lang.plugin.name'
-    description: 'terne.vuejs::lang.plugin.description'
-    author: Terne
-    icon: oc-icon-code
-    homepage: ''

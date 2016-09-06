@@ -24,7 +24,7 @@ return [
     |
     */
 
-    'edgeUpdates' => false,
+    'edgeUpdates' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -60,7 +60,7 @@ return [
     |
     */
 
-    'backendSkin' => 'Backend\Skins\Standard',
+    'backendSkin' => 'Backend\Skins\Simple',
 
     /*
     |--------------------------------------------------------------------------

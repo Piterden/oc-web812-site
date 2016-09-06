@@ -1,8 +1,15 @@
 ##Backend toolkit plugin
-This plugin extend the back-end to some new dashboard widgets, form widgets, useful features and front-end components.
+This plugin extend the back-end to useful features, some new dashboard widgets, form widgets and front-end components.
+
+###Advantages of plugin
+* __Increase the speed of your webpage!__ - Enable the gzip compression of server.
+* __Delete the unused files and folders!__ - Scan and find the unnecessary elements.
+* __Let's work effectively and quickly!__ - Extend the operation of input fields.
+* __Be simpler the back-end interface!__ - Hide the unused elements and texts.
+* __Make an informative nice dashboard!__ - Add some new widgets to dashboard.
 
 ###New back-end features
-* __Enable the gzip compression.__ [More info &raquo;](https://developers.google.com/speed/docs/insights/EnableCompression))
+* __Enable the gzip compression.__ [More info &raquo;](https://developers.google.com/speed/docs/insights/EnableCompression)
 * Hide the menu description in sidebar.
 * __Focus the search field automatically.__
 * Hide the search field in sidebar.
@@ -12,6 +19,9 @@ This plugin extend the back-end to some new dashboard widgets, form widgets, use
 * Hide the "Find more themes" link in Design.
 * __Add the clear button to input fields.__
 * Uninstall the October Demo plugin.
+
+###New menu in System panel
+__Delete the unused files and folders__ of OctoberCMS such as text files (readme and license), old files, empty folders and unnecessary database settings. You can find this feature on the __Settings > System > Trash items__ page. For compatibility reasons you can __use the latest version__ of OctoberCMS and plugins!
 
 ###New dashboard widgets
 * __System status plus (updates, plugins and themes)__

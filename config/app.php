@@ -116,7 +116,7 @@ return [
 
         'System\ServiceProvider',
 
-        'JasonLewis\ResourceWatcher\Integration\LaravelServiceProvider',
+        Recca0120\Terminal\ServiceProvider::class,
 
     ]),
 
